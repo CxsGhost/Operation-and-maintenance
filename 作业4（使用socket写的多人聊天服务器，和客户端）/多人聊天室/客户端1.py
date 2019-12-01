@@ -5,7 +5,9 @@ import get
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 addr = (get.get_ip(), 10000)
+user_name = input("输入你的用户名：")
 s.connect(addr)
+s.send(user_name.encode("gbk"))
 
 
 def recv_msg():  #

@@ -22,24 +22,24 @@ class ChatSever:
     def accept_cont(self):
         while True:
             s, addr = self.sock.accept()
-            self.users[addr] = s
+            user_name = s.recv(1024).decode("gbk")
+            self.users[user_name] = s
             number = len(self.users)
-            print("用户{}连接成功！现在共有{}位用户".format(addr, number))
+            print("用户'{}'连接成功！现在共有{}位用户".format(user_name, number))
 
-            threading.Thread(target=self.recv_send, args=(s, addr)).start()
-            # threading.Thread(target=self.send_msg, args=(s, addr)).start()
+            threading.Thread(target=self.recv_send, args=(s, user_name)).start()
 
-    def recv_send(self, sock, addr):
+    def recv_send(self, sock, user_name):
         while True:
             try:  # 测试后发现，当用户率先选择退出时，这边就会报ConnectionResetError
                 response = sock.recv(4096).decode("gbk")
-                msg = "{}用户{}发来消息：{}".format(get.get_time(), addr, response)
+                msg = "{}用户'{}'发来消息：{}".format(get.get_time(), user_name, response)
 
                 for client in self.users.values():
                     client.send(msg.encode("gbk"))
             except ConnectionResetError:
-                print("用户{}已经退出聊天！".format(addr))
-                self.users.pop(addr)
+                print("用户'{}'已经退出聊天！".format(user_name))
+                self.users.pop(user_name)
                 break
 
     @property
@@ -60,6 +60,6 @@ if __name__ == "__main__":
         """
         try:
             exec("sever."+cmd)
-        except Exception as e:
+        except Exception as e:  # 这个地方我发现会爆很多乱七八糟的异常，干脆就直接一个Exception
             print("输入命令无效，请重新输入！")
             print(e)
