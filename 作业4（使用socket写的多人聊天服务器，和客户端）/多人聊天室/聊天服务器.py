@@ -11,11 +11,11 @@ class ChatSever:
         self.addr = (get.get_ip(), 10000)
         self.users = {}
 
+    @property
     def start_sever(self):
         self.sock.bind(self.addr)
         self.sock.listen(5)
         print("服务器已开启，等待连接...")
-        print("在空白处输入stop sever并回车，来关闭服务器")
 
         threading.Thread(target=self.accept_cont).start()
 
@@ -42,7 +42,8 @@ class ChatSever:
                 self.users.pop(addr)
                 break
 
-    def __close_sever(self):
+    @property
+    def stop_sever(self):
         for client in self.users.values():
             client.close()
         self.sock.close()
@@ -50,12 +51,15 @@ class ChatSever:
 
 
 if __name__ == "__main__":
-    print(dir(ChatSever))
     sever = ChatSever()
-    sever.start_sever()
     while True:
-        cmd = input()
-        if cmd == "stop sever":
-            sever._ChatSever__close_sever()
-        else:
+        cmd = input(">>>")
+        """
+        只有服务器管理员知晓正确的命令
+        由此开启和关闭服务
+        """
+        try:
+            exec("sever."+cmd)
+        except Exception as e:
             print("输入命令无效，请重新输入！")
+            print(e)
