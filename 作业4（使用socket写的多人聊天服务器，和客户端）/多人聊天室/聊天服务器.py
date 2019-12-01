@@ -1,7 +1,7 @@
 import socket
 import get  # 自己写的
-import threading
-import os
+import threading  # 为了实现全双工
+import os  # 结束聊天后，直接退出
 
 
 class ChatSever:
@@ -56,6 +56,7 @@ if __name__ == "__main__":
         cmd = input(">>>")
         """
         只有服务器管理员知晓正确的命令
+        是我就是我
         由此开启和关闭服务
         """
         try:

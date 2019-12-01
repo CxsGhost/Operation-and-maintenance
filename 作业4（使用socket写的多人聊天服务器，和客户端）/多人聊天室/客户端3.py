@@ -10,7 +10,7 @@ s.connect(addr)
 s.send(user_name.encode("gbk"))
 
 
-def recv_msg():  #
+def recv_msg():
     print("连接成功！现在可以接收消息！\n")
     while True:
         try:  # 测试发现，当服务器率先关闭时，这边也会报ConnectionResetError
