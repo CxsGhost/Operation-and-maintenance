@@ -42,7 +42,7 @@ class ChatSever:
                 self.users.pop(addr)
                 break
 
-    def close_sever(self):
+    def __close_sever(self):
         for client in self.users.values():
             client.close()
         self.sock.close()
@@ -50,11 +50,12 @@ class ChatSever:
 
 
 if __name__ == "__main__":
+    print(dir(ChatSever))
     sever = ChatSever()
     sever.start_sever()
     while True:
         cmd = input()
         if cmd == "stop sever":
-            sever.close_sever()
+            sever._ChatSever__close_sever()
         else:
             print("输入命令无效，请重新输入！")
